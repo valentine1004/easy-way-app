@@ -4,6 +4,7 @@ import { Container, Content, Tabs } from 'native-base';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import MyLocation from './MyLocation.js';
 import DoRequest from './DoRequest.js';
+import RateDoctor from './RateDoctor.js';
 
 class PatientScreen extends React.Component {
 
@@ -25,7 +26,8 @@ class PatientScreen extends React.Component {
             index: 0,
             routes: [
                 { key: 'first', title: 'Запит' },
-                { key: 'second', title: 'Інформація' }
+                { key: 'second', title: 'Інформація' },
+                { key: 'third', title: 'Оцінити' }
             ],
         };
     }
@@ -42,7 +44,8 @@ class PatientScreen extends React.Component {
                     navigationState={this.state}
                     renderScene={SceneMap({
                         first: DoRequest,
-                        second: MyLocation
+                        second: MyLocation,
+                        third: RateDoctor
                     })}
                     onIndexChange={index => this.setState({ index })}
                     initialLayout={{ width: Dimensions.get('window').width }}
