@@ -25,11 +25,22 @@ class HomeScreen extends React.Component {
 
             if (value !== null) {
                 let data = JSON.parse(value);
-                if (data.role === 'doctor') {
-                    this.props.navigation.navigate('Doctor');
-                } else if (data.role === 'patient') {
-                    this.props.navigation.navigate('Patient');
+                switch(data.role){
+                    case 'doctor':
+                        this.props.navigation.navigate('Doctor');
+                        break;
+                    case 'patient':
+                        this.props.navigation.navigate('Patient');
+                        break;
+                    case 'manager':
+                        this.props.navigation.navigate('Manager');
+                        break;
                 }
+                // if (data.role === 'doctor') {
+                //     this.props.navigation.navigate('Doctor');
+                // } else if (data.role === 'patient') {
+                //     this.props.navigation.navigate('Patient');
+                // }
             }
         } catch (error) {
             console.log("error");
