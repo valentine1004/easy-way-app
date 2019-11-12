@@ -37,7 +37,7 @@ router.post('/', async (req, res) => {
 
 
 router.post('/search', async (req, res) => {
-    const requests = await Request.find({area: req.body.area, date: req.body.date});
+    const requests = await Request.find(req.body);
     if (!requests) return res.status(400).send('Requests is not found');
     res.send(requests);
 })

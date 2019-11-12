@@ -12,7 +12,19 @@ import { createStackNavigator } from 'react-navigation-stack';
 const AppStack = createStackNavigator(
   { 
     Home: HomeScreen, 
-    Patient: PatientScreen, 
+    Patient: {
+      screen: PatientScreen,
+      navigationOptions: {
+        title: 'Пацієнт',
+        headerStyle: {
+          backgroundColor: '#2C73D2',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }
+    }, 
     Doctor: DoctorScreen, 
     Manager: {
       screen: ManagerScreen,

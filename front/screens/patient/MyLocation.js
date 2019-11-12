@@ -52,6 +52,11 @@ class MyLocation extends React.Component {
         }
     };
 
+    handlerLogout = async () => {
+        await AsyncStorage.clear();
+        this.props.navigation.navigate("Login");
+    }
+
     render() {
         return (
             <Container>
@@ -76,6 +81,7 @@ class MyLocation extends React.Component {
                         }} />
                     </MapView>
                 }
+                <Button title="Вийти з системи" onPress={this.handlerLogout}></Button>
             </Container>
         )
     }

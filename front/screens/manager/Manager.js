@@ -1,46 +1,36 @@
 import React from 'react';
-import { StyleSheet, View, Button, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+import ProfileScreen from './Profile.js';
+import RatingDoctorsScreen from './RatingDoctors.js';
 
-
-
-class HomeScreen extends React.Component {
-    render() {
-      return(
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text> This is my Home screen </Text>
-        </View>
-      );
-    }
-  }
-  
-  class ExploreScreen extends React.Component {
-    render() {
-      return(
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text> This is my Explore screen </Text>
-        </View>
-      );
-    }
-  }
-
-  const bottomTabNavigator = createBottomTabNavigator(
+const bottomTabNavigator = createBottomTabNavigator(
     {
-      Home: {
-          screen: HomeScreen,
-          navigationOptions: {
-            tabBarIcon: () => (
-              <Icon name="home" size={25} color={'#2C73D2'} />
-            )
-          }
-      },
-      Explore: ExploreScreen
+        Profile: {
+            screen: ProfileScreen,
+            navigationOptions: {
+                tabBarIcon: ({focused}) => (
+                    focused ? <Icon name="user-circle-o" size={25} color={'#2C73D2'} /> :
+                    <Icon name="user-circle-o" size={25} color={'#a1a1a1'} />
+                ),
+                title: 'Профіль',
+            }
+        },
+        RatingDoctors: {
+            screen: RatingDoctorsScreen,
+            navigationOptions: {
+                tabBarIcon: ({focused}) => (
+                    focused ? <Icon name="list-alt" size={25} color={'#2C73D2'} /> :
+                    <Icon name="list-alt" size={25} color={'#a1a1a1'} />
+                ),
+                title: 'Відгуки лікарям',
+            }
+        }
     },
     {
-      initialRouteName: 'Home'
+        initialRouteName: 'Profile'
     }
-  );
+);
 
 export default createAppContainer(bottomTabNavigator);
