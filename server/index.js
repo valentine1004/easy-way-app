@@ -18,6 +18,6 @@ app.use(express.json());
 app.use('/users', usersRoutes);
 app.use('/requests', requestsRoutes);
 
-app.listen(process.env.PORT, () => {
+app.listen(5000, () => {
     console.log('server is running')
 });
