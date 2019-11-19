@@ -48,5 +48,10 @@ router.post('/search', async (req, res) => {
     res.send(requests);
 })
 
+router.post('/finished', async (req, res) => {
+    const requests = await Request.find({date: { $lt: req.body.date }, patientId: req.body.patientId });
+    if (!requests) return res.status(400).send('Requests is not found');
+    res.send(requests);
+})
 
 module.exports = router;

@@ -5,7 +5,7 @@ import Geocoder from 'react-native-geocoding';
 import MapView, { Marker } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import { url, GOOGLE_MAPS_APIKEY } from '../../main';
-import getDistance from '../../assets/utils';
+import {getDistance, getCurrentDate} from '../../assets/utils';
 
 Geocoder.init(GOOGLE_MAPS_APIKEY);
 
@@ -46,15 +46,6 @@ class RouteScreen extends React.Component {
         await this.getRequests();
     }
 
-    getCurrentDate = () => {
-        let currentData = new Date();
-        let year = currentData.getFullYear();
-        let month = currentData.getMonth() + 1;
-        let day = currentData.getDate();
-
-        return `${year}-${month}-${day}`;
-    }
-
     _retrieveUserData = async () => {
         try {
             const value = await AsyncStorage.getItem('user');
@@ -72,11 +63,6 @@ class RouteScreen extends React.Component {
         } catch (err) {
             console.log('error');
         }
-    }
-
-    handlerLogout = () => {
-        AsyncStorage.clear();
-        this.props.navigation.navigate("Login");
     }
 
     findMaxDistance = (points) => {
@@ -122,7 +108,7 @@ class RouteScreen extends React.Component {
         if (value !== null) {
             let data = JSON.parse(value);
             let requestsCriterias = {
-                date: this.getCurrentDate(),
+                date: getCurrentDate(),
                 area: data.area,
                 doctorId: data.id
             }
@@ -193,16 +179,10 @@ class RouteScreen extends React.Component {
 
                         </MapView>
                     }
-                    <View>
-                        <Button title="Вийти з системи" onPress={this.handlerLogout}></Button>
-                    </View>
                 </Container> :
                 <Container>
                     <View style={{ alignItems: 'center', padding: 15 }}>
                         <Text>На сьогодні пацієнтів немає</Text>
-                    </View>
-                    <View>
-                        <Button title="Вийти з системи" onPress={this.handlerLogout}></Button>
                     </View>
                 </Container>
         )

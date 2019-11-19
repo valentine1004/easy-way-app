@@ -81,7 +81,9 @@ class MyLocation extends React.Component {
                         }} />
                     </MapView>
                 }
-                <Button title="Вийти з системи" onPress={this.handlerLogout}></Button>
+                <View style={{padding: 16}}>
+                    <Button title="Вийти з системи" onPress={this.handlerLogout}></Button>
+                </View>
             </Container>
         )
     }

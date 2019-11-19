@@ -13,7 +13,7 @@ const requestsSchema = new mongoose.Schema({
         require: true,
     },
     date: {
-        type: String,
+        type: Number,
         require: true
     },
     priority: {

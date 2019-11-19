@@ -14,4 +14,19 @@ function getDistance(p1, p2) {
     return d; // returns the distance in meter
 };
 
-export default getDistance;
+function convertUnixToDate(unix){
+    let newDate = new Date(unix*1000);
+    let year = newDate.getFullYear();
+    let month = newDate.getMonth() + 1;
+    let date = newDate.getDate();
+    return `${year}-${month}-${date}`;
+}
+
+function getCurrentDate(){
+    let currentData = new Date().getTime() / 1000;
+    let fixedCurrentData = new Date(convertUnixToDate(currentData)).getTime() / 1000;
+
+    return fixedCurrentData;
+}
+
+export {getDistance, convertUnixToDate, getCurrentDate};

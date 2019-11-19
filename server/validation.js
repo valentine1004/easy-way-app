@@ -31,7 +31,7 @@ const requestValidation = (data) => {
         title: Joi.string().required(),
         description: Joi.string().required(),
         location: Joi.string().required(),
-        date: Joi.string().required(),
+        date: Joi.number().required(),
         priority: Joi.string().required(),
         patientId: Joi.string().required(),
         area: Joi.string().required(),

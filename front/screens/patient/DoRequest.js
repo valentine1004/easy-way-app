@@ -3,6 +3,7 @@ import { StyleSheet, View, Button, Text, AsyncStorage } from 'react-native';
 import DatePicker from 'react-native-datepicker'
 import { Container, Content, Form, Item, Label, Input, Textarea, Picker } from 'native-base';
 import {url} from '../../main';
+import {convertUnixToDate, getCurrentDate} from '../../assets/utils';
 
 class DoRequest extends React.Component {
 
@@ -17,27 +18,22 @@ class DoRequest extends React.Component {
                 patientId: "",
                 area: "",
                 priority: "1",
-                date: "2019-5-15",
+                date: undefined,
                 doctorId: ""
             },
         }
     }
 
     componentDidMount() {
-        this.getCurrentDate();
+        this.setCurrentDate();
         this._retrieveUserData();
     }
 
-    getCurrentDate = () => {
-        let currentData = new Date();
-        let year = currentData.getFullYear();
-        let month = currentData.getMonth() + 1;
-        let day = currentData.getDate();
-
+    setCurrentDate = () => {
         this.setState({
             request: {
                 ...this.state.request,
-                date: `${year}-${month}-${day}`
+                date: getCurrentDate()
             }
         });
     }
@@ -64,10 +60,11 @@ class DoRequest extends React.Component {
     };
 
     handlerChangeDate = (date) => {
+        let unixDate = new Date(date).getTime() / 1000;
         this.setState({
             request: {
                 ...this.state.request,
-                date: date
+                date: unixDate
             }
         })
     }
@@ -158,11 +155,11 @@ class DoRequest extends React.Component {
                         <View style={{ alignItems: 'center', marginTop: 20 }}>
                             <DatePicker
                                 style={{ width: 300, flex: 1, alignItems: 'center' }}
-                                date={this.state.request.date}
+                                date={convertUnixToDate(this.state.request.date)}
                                 mode="date"
                                 placeholder="select date"
                                 format="YYYY-MM-DD"
-                                minDate={this.state.request.date}
+                                minDate={convertUnixToDate(this.state.request.date)}
                                 confirmBtnText="Confirm"
                                 cancelBtnText="Cancel"
                                 customStyles={{
