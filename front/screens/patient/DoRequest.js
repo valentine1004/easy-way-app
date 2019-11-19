@@ -17,7 +17,8 @@ class DoRequest extends React.Component {
                 patientId: "",
                 area: "",
                 priority: "1",
-                date: "2019-5-15"
+                date: "2019-5-15",
+                doctorId: ""
             },
         }
     }
@@ -51,7 +52,8 @@ class DoRequest extends React.Component {
                         ...this.state.request,
                         location: data.location,
                         patientId: data.id,
-                        area: data.area
+                        area: data.area,
+                        doctorId: data.doctorId
                     }
                 })
             }

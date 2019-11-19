@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const {registerValidation, loginValidation} = require('../../validation');
 
 router.post('/register', async (req, res) => {
+    
     const {error} = registerValidation(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -22,7 +23,10 @@ router.post('/register', async (req, res) => {
         phone: req.body.phone,
         location: req.body.location,
         area: req.body.area,
-        role: req.body.role
+        role: req.body.role,
+        schedule: req.body.schedule,
+        description: req.body.description,
+        doctorId: req.body.doctorId
     });
 
     try {
@@ -35,7 +39,10 @@ router.post('/register', async (req, res) => {
                 phone: user.phone,
                 location: user.location,
                 area: user.area,
-                role: user.role
+                role: user.role,
+                schedule: user.schedule,
+                description: user.description,
+                doctorId: user.doctorId
             }
         });
     } catch (err) {
@@ -65,7 +72,10 @@ router.post('/login', async (req, res) => {
             phone: user.phone,
             location: user.location,
             area: user.area,
-            role: user.role
+            role: user.role,
+            schedule: user.schedule,
+            description: user.description,
+            doctorId: user.doctorId
         },
         token: token
     });
@@ -83,5 +93,11 @@ router.post('/auth', async (req, res) => {
         }
     });
 });
+
+router.post('/search', async (req, res) => {
+    const users = await User.find(req.body);
+    if (!users) return res.status(400).send('Users is not found');
+    res.send(users);
+})
 
 module.exports = router;

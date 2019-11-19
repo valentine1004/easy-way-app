@@ -33,6 +33,18 @@ const usersSchema = new mongoose.Schema({
     role: {
         type: String,
         require: true
+    },
+    schedule: {
+        type: Object,
+        require: false
+    },
+    description: {
+        type: String,
+        require: false
+    },
+    doctorId: {
+        type: String,
+        require: false
     }
 });
 

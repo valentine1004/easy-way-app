@@ -8,7 +8,10 @@ const registerValidation = data => {
         phone: Joi.string(),
         location: Joi.string(),
         area: Joi.string(),
-        role: Joi.string()
+        role: Joi.string(),
+        description: Joi.string(),
+        schedule: Joi.object(),
+        doctorId: Joi.string()
     };
 
     return Joi.validate(data, schema);
@@ -31,7 +34,10 @@ const requestValidation = (data) => {
         date: Joi.string().required(),
         priority: Joi.string().required(),
         patientId: Joi.string().required(),
-        area: Joi.string().required()
+        area: Joi.string().required(),
+        doctorId: Joi.string().required(),
+        evaluation: Joi.string(),
+        comment: Joi.string()
     }
     return Joi.validate(data, schema);
 }

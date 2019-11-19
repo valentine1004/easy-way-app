@@ -8,12 +8,15 @@ router.post('/', async (req, res) => {
     if (error) return res.status(400).send(error.details[0].message);
     const request = new Request({
         title: req.body.title,
-        description: req.body.title,
+        description: req.body.description,
         location: req.body.location,
         date: req.body.date,
         priority: req.body.priority,
         patientId: req.body.patientId,
-        area: req.body.area
+        area: req.body.area,
+        doctorId: req.body.doctorId,
+        evaluation: req.body.evaluation,
+        comment: req.body.comment
     });
 
     try {
@@ -27,7 +30,10 @@ router.post('/', async (req, res) => {
                 date: request.date,
                 priority: request.priority,
                 patientId: request.patientId,
-                area: request.area
+                area: request.area,
+                doctorId: request.doctorId,
+                evaluation: request.evaluation,
+                comment: request.comment
             }
         });
     } catch (err) {

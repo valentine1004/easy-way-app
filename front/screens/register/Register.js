@@ -1,22 +1,35 @@
 import React from 'react';
-import { StyleSheet, View, Button, Text } from 'react-native';
+import { StyleSheet, View, Button, Text, TouchableOpacity } from 'react-native';
 import { Container, Content, Form, Item, Label, Input, Picker } from 'native-base';
-import {url} from '../../main';
+import { url } from '../../main';
+
+const districts = [
+    'Оболонський',
+    'Деснянський',
+    'Дніпровський',
+    'Дарницький',
+    'Шевченківський',
+    'Подільський',
+    "Солом'янський",
+    "Голосіївський",
+    "Печерський",
+    "Святошинський"
+];
 
 class RegisterScreen extends React.Component {
 
     static navigationOptions = {
         title: 'Створити акаунт',
         headerStyle: {
-          backgroundColor: '#2C73D2',
+            backgroundColor: '#2C73D2',
         },
         headerTintColor: '#fff',
         headerTitleStyle: {
-          fontWeight: 'bold',
+            fontWeight: 'bold',
         },
-      };
+    };
 
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -27,18 +40,53 @@ class RegisterScreen extends React.Component {
                 phone: "",
                 location: "",
                 area: "1",
-                password: ""
-            }
+                password: "",
+                doctorId: ""
+            },
+            doctors: []
         }
     }
 
-    onChangeField = (field, value) => {
-        this.setState({
-            user: {
-                ...this.state.user,
-                [field]: value
-            }
+    componentDidMount() {
+        this.searchDoctors();
+    }
+
+    searchDoctors = () => {
+        fetch(`${url}/users/search`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ role: "doctor" }),
+        }).then((res) => {
+            return res.json();
+        }).then((data) => {
+            this.setState({
+                doctors: data
+            })
+        }).catch(error => {
+            alert(error);
         })
+    }
+
+    onChangeField = (field, value) => {
+        if (field === "area") {
+            this.setState({
+                user: {
+                    ...this.state.user,
+                    [field]: value,
+                    doctorId: ""
+                }
+            })
+        } else {
+            this.setState({
+                user: {
+                    ...this.state.user,
+                    [field]: value
+                }
+            })
+        }
     }
 
     handlerRegister = () => {
@@ -58,6 +106,10 @@ class RegisterScreen extends React.Component {
         })
     }
 
+    handlerDescribeDoctors = () => {
+        this.props.navigation.navigate("FamilyDoctors");
+    }
+
     render() {
         return (
             <Container>
@@ -67,28 +119,28 @@ class RegisterScreen extends React.Component {
                             <Label>Ім'я</Label>
                             <Input
                                 onChangeText={(text) => this.onChangeField("name", text)}
-                                value={this.state.user.name}  
+                                value={this.state.user.name}
                             />
                         </Item>
                         <Item floatingLabel>
                             <Label>Електронна пошта</Label>
                             <Input
                                 onChangeText={(text) => this.onChangeField("email", text)}
-                                value={this.state.user.email} 
-                             />
-                        </Item>
-                        <Item floatingLabel>
-                            <Label>Телефон</Label>
-                            <Input 
-                                onChangeText={(text) => this.onChangeField("phone", text)}
-                                value={this.state.user.phone} 
+                                value={this.state.user.email}
                             />
                         </Item>
                         <Item floatingLabel>
-                            <Label>Місце проживання/роботи(для лікарів)</Label>
+                            <Label>Телефон</Label>
+                            <Input
+                                onChangeText={(text) => this.onChangeField("phone", text)}
+                                value={this.state.user.phone}
+                            />
+                        </Item>
+                        <Item floatingLabel>
+                            <Label>Місце проживання</Label>
                             <Input
                                 onChangeText={(text) => this.onChangeField("location", text)}
-                                value={this.state.user.location}  
+                                value={this.state.user.location}
                             />
                         </Item>
                         <Item floatingLabel last>
@@ -96,46 +148,54 @@ class RegisterScreen extends React.Component {
                             <Input
                                 onChangeText={(text) => this.onChangeField("password", text)}
                                 value={this.state.user.password}
-                                secureTextEntry={true}  
+                                secureTextEntry={true}
                             />
                         </Item>
-                        <Item style={{marginTop: 10}}>
+                        <Item style={{ marginTop: 10 }}>
                             <Picker
                                 iosHeader="District"
                                 mode="dropdown"
                                 selectedValue={this.state.user.area}
                                 onValueChange={(value) => this.onChangeField("area", value)}>
-                                <Item label="Оболонський" value="1" />
-                                <Item label="Деснянський" value="2" />
-                                <Item label="Дніпровський" value="3" />
-                                <Item label="Дарницький" value="4" />
-                                <Item label="Шевченківський" value="5" />
-                                <Item label="Подільський" value="6" />
-                                <Item label="Солом'янський" value="7" />
-                                <Item label="Голосіївський" value="8" />
-                                <Item label="Печерський" value="9" />
-                                <Item label="Святошинський" value="10" />
+                                {
+                                    districts.map((district, i) => {
+                                        return <Item label={district} key={i} value={String(i + 1)} />
+                                    })
+                                }
                             </Picker>
                         </Item>
-                        <Item style={{marginTop: 10}}>
-                            <Picker
-                                iosHeader="Role"
-                                mode="dropdown"
-                                selectedValue={this.state.user.role}
-                                onValueChange={(value) => this.onChangeField("role", value)}>
-                                <Item label="Пацієнт" value="patient" />
-                                <Item label="Лікар" value="doctor" />
-                            </Picker>
-                        </Item>
+                        {
+                            this.state.doctors && <Item style={{ marginTop: 10 }}>
+                                <Picker
+                                    mode="dropdown"
+                                    placeholder="Select your SIM"
+                                    placeholderStyle={{ color: "#bfc6ea" }}
+                                    selectedValue={this.state.user.doctorId}
+                                    onValueChange={(value) => this.onChangeField("doctorId", value)}>
+                                    <Item label="Виберіть лікаря" value={""} />
+                                    {
+                                        this.state.doctors.filter(el => el.area === this.state.user.area).map(el => {
+                                            return (<Item label={el.name} value={el._id} key={el._id} />)
+                                        })
+                                    }
+                                </Picker>
+                            </Item>
+                        }
                         <View style={{ flex: 1, alignItems: 'center', marginTop: 20, color: "red" }}>
-                            <Button 
-                                title="Створити" 
+                            <Button
+                                title="Створити"
                                 color={"#2C73D2"}
-                                onPress={this.handlerRegister} 
+                                onPress={this.handlerRegister}
                             />
                         </View>
                     </Form>
                 </Content>
+                <TouchableOpacity
+                    style={styles.describeDoctors}
+                    onPress={this.handlerDescribeDoctors}
+                >
+                    <Text>Переглянути сімейних лікарів</Text>
+                </TouchableOpacity>
             </Container>
         )
     }
@@ -148,6 +208,10 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         color: "#f194ff"
+    },
+    describeDoctors: {
+        marginBottom: 30,
+        alignItems: 'center'
     }
 });
 

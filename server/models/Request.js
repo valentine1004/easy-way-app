@@ -27,6 +27,18 @@ const requestsSchema = new mongoose.Schema({
     area: {
         type: String,
         require: true
+    },
+    doctorId: {
+        type: String,
+        require: true
+    },
+    evaluation: {
+        type: String,
+        require: false
+    },
+    comment: {
+        type: String,
+        require: false
     }
 });
 
