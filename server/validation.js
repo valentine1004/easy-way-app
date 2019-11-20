@@ -36,7 +36,7 @@ const requestValidation = (data) => {
         patientId: Joi.string().required(),
         area: Joi.string().required(),
         doctorId: Joi.string().required(),
-        evaluation: Joi.string(),
+        evaluation: Joi.number(),
         comment: Joi.string()
     }
     return Joi.validate(data, schema);

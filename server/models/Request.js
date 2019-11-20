@@ -33,7 +33,7 @@ const requestsSchema = new mongoose.Schema({
         require: true
     },
     evaluation: {
-        type: String,
+        type: Number,
         require: false
     },
     comment: {

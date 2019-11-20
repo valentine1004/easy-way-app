@@ -54,4 +54,11 @@ router.post('/finished', async (req, res) => {
     res.send(requests);
 })
 
+router.put('/:id', async (req, res) => {
+    console.log(req.body);
+    const request = await Request.findOneAndUpdate({_id: req.params.id}, req.body);
+    if (!request) return res.status(400).send('Requests is not found');
+    res.send(req.body);
+})
+
 module.exports = router;

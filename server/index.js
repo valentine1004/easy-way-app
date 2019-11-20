@@ -10,7 +10,7 @@ const requestsRoutes = require('./routes/requests');
 dotenv.config();
 
 // connect to DB
-mongoose.connect('mongodb://localhost/EasyWayApp', {useNewUrlParser: true}, () => console.log('connected to DB'));
+mongoose.connect('mongodb://localhost/EasyWayApp', {useNewUrlParser: true, useFindAndModify: false }, () => console.log('connected to DB'));
 
 app.use(cors());
 app.use(express.json());

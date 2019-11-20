@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, View, Button, Text, Dimensions, AsyncStorage } from 'react-native';
-import { Container, Content, List, ListItem, Left, Body, Right, Thumbnail } from 'native-base';
+import { Container, Content, List, ListItem, Left, Body, Right, Thumbnail, Textarea } from 'native-base';
 import { Rating, AirbnbRating } from 'react-native-ratings';
 import { url } from '../../main';
-import { getCurrentDate, convertUnixToDate} from '../../assets/utils';
+import { getCurrentDate, convertUnixToDate } from '../../assets/utils';
 import requestIcon from '../../assets/request.png';
 
 class RateDoctor extends React.Component {
@@ -12,7 +12,7 @@ class RateDoctor extends React.Component {
         super(props);
 
         this.state = {
-            requests: [], 
+            requests: [],
             selected: null
         }
     }
@@ -43,42 +43,86 @@ class RateDoctor extends React.Component {
     }
 
     ratingCompleted = (rating) => {
-        console.log("Rating is: " + rating)
+        this.setState({
+            selected: {
+                ...this.state.selected,
+                evaluation: rating
+            }
+        });
     }
 
-    selectRequest = (id) => {
+    handlerChangeComment = (text) => {
         this.setState({
-            selected: id
+            selected: {
+                ...this.state.selected,
+                comment: text
+            }
+        });
+    }
+
+    leaveComment = async () => {
+        await fetch(`${url}/requests/${this.state.selected._id}`, {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(this.state.selected),
+        }).then((res) => {
+            return res.json();
+        }).then((data) => {
+            this.setState({selected: null});
+            this.getLastRequests();
+        }).catch(error => {
+            alert(error);
+        })
+    }
+
+    selectRequest = (el) => {
+        this.setState({
+            selected: {...el}
         })
     }
 
     render() {
         return (
             <Container>
-
-                {/* <AirbnbRating
-                    count={11}
-                    reviews={["Terrible", "Bad", "Meh", "OK", "Good", "Hmm...", "Very Good", "Wow", "Amazing", "Unbelievable", "Jesus"]}
-                    defaultRating={11}
-                    size={20}
-                    onFinishRating={this.ratingCompleted}
-                /> */}
                 <Content>
                     <List>
                         {this.state.requests && this.state.requests.map(el => {
                             return (
-                                <ListItem avatar key={el._id}>
-                                    <Left>
-                                        <Thumbnail source={requestIcon} />
-                                    </Left>
-                                    <Body>
-                                        <Text>{el.title}</Text>
-                                        <Text style={{ fontStyle: 'italic' }}>{el.description}</Text>
-                                    </Body>
-                                    <Right>
-                                        <Text note>{convertUnixToDate(el.date)}</Text>
-                                    </Right>
-                                </ListItem>
+                                this.state.selected === null || (this.state.selected && this.state.selected._id !== el._id) ?
+                                    <ListItem avatar key={el._id} onPress={() => this.selectRequest(el)}>
+                                        <Left>
+                                            <Thumbnail source={requestIcon} />
+                                        </Left>
+                                        <Body>
+                                            <Text>{el.title}</Text>
+                                            <Text style={{ fontStyle: 'italic' }}>{el.description}</Text>
+                                        </Body>
+                                        <Right>
+                                            <Text note>{convertUnixToDate(el.date)}</Text>
+                                        </Right>
+                                    </ListItem> : this.state.selected._id === el._id ?
+                                        <View key={el._id} style={styles.editedBlock}>
+                                            <Text style={{ fontWeight: 'bold' }}>Залиште відгук та оцініть прийом лікаря</Text>
+                                            <Textarea
+                                                style={{ width: 250, marginTop: 10 }}
+                                                rowSpan={3} bordered placeholder="Відгук"
+                                                value={this.state.selected.comment ? this.state.selected.comment : null}
+                                                onChangeText={(text) => this.handlerChangeComment(text)}
+                                            />
+                                            <AirbnbRating
+                                                count={5}
+                                                reviews={["Дуже погано", "Погано", "Задовільно", "Добре", "Чудово"]}
+                                                defaultRating={this.state.selected.evaluation ? this.state.selected.evaluation : 4}
+                                                size={15}
+                                                onFinishRating={this.ratingCompleted}
+                                            />
+                                            <View style={{ marginTop: 10 }}>
+                                                <Button title="Залишити відгук" onPress={this.leaveComment} />
+                                            </View>
+                                        </View> : null
                             )
                         })}
                     </List>
@@ -92,7 +136,13 @@ class RateDoctor extends React.Component {
 }
 
 const styles = StyleSheet.create({
-
+    editedBlock: {
+        borderWidth: 0.5,
+        borderColor: '#d6d7da',
+        padding: 10,
+        flex: 1,
+        alignItems: 'center'
+    }
 });
 
 export default RateDoctor;
