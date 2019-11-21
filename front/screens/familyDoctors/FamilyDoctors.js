@@ -90,11 +90,6 @@ class FamilyDoctorsScreen extends React.Component {
                                             <Text note>{this.findDistrict(item.area)}</Text>
                                             <Text note>{item.description}</Text>
                                         </Body>
-                                        <Right>
-                                            <Button transparent>
-                                                <Text>View</Text>
-                                            </Button>
-                                        </Right>
                                     </ListItem>
                                 )
                             })

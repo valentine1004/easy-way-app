@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Button, Text, Dimensions, AsyncStorage } from 'react-native';
 import { Container, Content, List, ListItem, Left, Body, Right, Thumbnail, Textarea } from 'native-base';
-import { Rating, AirbnbRating } from 'react-native-ratings';
+import { AirbnbRating } from 'react-native-ratings';
 import { url } from '../../main';
 import { getCurrentDate, convertUnixToDate } from '../../assets/utils';
 import requestIcon from '../../assets/request.png';
